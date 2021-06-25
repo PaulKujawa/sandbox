@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
+        "baseUrl": "src",
         "declaration": true,
         "declarationDir": "./dist/types",
         "jsx": "react",
@@ -13,7 +14,9 @@
         "strict": true,
         "target": "ESNext",
         "types": ["jest"],
-        "paths": {}
+        "paths": {
+            "@app/components": ["components"],
+        }
     },
     "exclude": [
         "node_modules"

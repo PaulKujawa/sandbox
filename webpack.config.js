@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = (env = {}, argv) => {
     const isDev = argv.mode === 'development';
@@ -22,7 +23,12 @@ module.exports = (env = {}, argv) => {
         resolve: {
             // so file extensions can be left out in imports
             // No (babel) loader is registered for js files, but Babel-loader places imports of core-js Js files 
-            extensions: ['.js', '.ts', '.tsx']
+            extensions: ['.js', '.ts', '.tsx'],
+
+            plugins: [
+                // ts-loader does not support TS compilerOption `paths` out of the box.
+                new TsconfigPathsPlugin({ configFile: "./tsconfig.json" }),
+            ],
         },
         // see https://webpack.js.org/configuration/devtool/#production for further optimisation
         devtool: isProd ? 'source-map' : 'eval-cheap-source-map',
@@ -82,15 +88,3 @@ module.exports = (env = {}, argv) => {
         }
     }
 };
-
-
-// {
-//     "presets": [
-//         "@babel/preset-env",
-//         "@babel/preset-react"
-//     ],
-//         "targets": {
-//         "chrome": "58",
-//             "ie": "11"
-//     }
-// }
