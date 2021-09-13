@@ -15,7 +15,7 @@
         "target": "ESNext",
         "types": ["jest"],
         "paths": {
-            "@app/components": ["components"],
+            "@app/components": ["components"]
         }
     },
     "exclude": [
