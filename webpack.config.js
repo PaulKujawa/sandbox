@@ -4,11 +4,16 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const SentryCliPlugin = require("@sentry/webpack-plugin");
+const webpack = require("webpack");
+const { GitRevisionPlugin } = require("git-revision-webpack-plugin");
 
 module.exports = (env = {}, argv) => {
-  const isDev = argv.mode === "development";
-  const isTest = argv.mode === "test";
-  const isProd = argv.mode === "production" || argv.mode === undefined; // prod is default
+  const isDev = !!env.WEBPACK_SERVE;
+  const isProd = !isDev;
+
+  // webpack plugin to get the latest git commit and version tag
+  const gitCommitHash = new GitRevisionPlugin().commithash();
 
   return {
     entry: {
@@ -75,6 +80,23 @@ module.exports = (env = {}, argv) => {
       new HtmlWebpackPlugin({
         template: "./src/index.html",
         favicon: "./src/assets/favicon.ico",
+      }),
+
+      // replace variables in code with provided values at compilation time
+      new webpack.DefinePlugin({
+        "process.env.GIT_COMMIT_HASH": JSON.stringify(gitCommitHash),
+      }),
+
+      new SentryCliPlugin({
+        authToken:
+          "288686163f564ca9878973e779b09c095188f0f3ec724c8abc17ac0732810652",
+        dryRun: isDev,
+        ignore: ["node_modules", "webpack.config.js"],
+        include: "./dist",
+        org: "paul-kujawa",
+        project: "webpack-playground",
+        release: gitCommitHash,
+        setCommits: { auto: true },
       }),
 
       // visual representation of bundles and chunks.
