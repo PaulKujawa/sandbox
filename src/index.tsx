@@ -36,7 +36,7 @@ export const App = () => {
       </Button>
       <button
         onClick={() => {
-          throw new Error("some error 1");
+          throw new Error("some error 2");
         }}
       >
         Throw error
