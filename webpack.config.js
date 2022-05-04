@@ -92,7 +92,7 @@ module.exports = (env = {}, argv) => {
       new SentryCliPlugin({
         authToken:
           "288686163f564ca9878973e779b09c095188f0f3ec724c8abc17ac0732810652",
-        dryRun: false,
+        dryRun: isDev,
         ignore: ["node_modules"],
         include: "./dist",
         org: "paul-kujawa",

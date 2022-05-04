@@ -3,6 +3,7 @@ const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-react-ts");
 const { GitRevisionPlugin } = require("git-revision-webpack-plugin");
 const SentryCliPlugin = require("@sentry/webpack-plugin");
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 module.exports = (env, argv) => {
   const defaultConfig = singleSpaDefaults({
