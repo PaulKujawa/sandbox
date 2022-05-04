@@ -1,4 +1,4 @@
-import { Todo } from "entities";
+import { Todo } from "./entities";
 import React from "react";
 import { getTodo } from "./repositories";
 

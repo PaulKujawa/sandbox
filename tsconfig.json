@@ -8,10 +8,11 @@
     "lib": ["DOM", "ES2021"],
     "module": "ES2020",
     "moduleResolution": "node",
-    "strict": true,
-    "target": "ESNext",
     "paths": {
       "@app/components": ["components"]
-    }
+    },
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext"
   }
 }
