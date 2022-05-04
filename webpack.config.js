@@ -6,6 +6,7 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const SentryCliPlugin = require("@sentry/webpack-plugin");
 const webpack = require("webpack");
 const { GitRevisionPlugin } = require("git-revision-webpack-plugin");
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 module.exports = (env = {}, argv) => {
   const isDev = !!env.WEBPACK_SERVE;
@@ -91,7 +92,7 @@ module.exports = (env = {}, argv) => {
       new SentryCliPlugin({
         authToken:
           "288686163f564ca9878973e779b09c095188f0f3ec724c8abc17ac0732810652",
-        dryRun: isDev,
+        dryRun: true,
         ignore: ["node_modules"],
         include: "./dist",
         org: "paul-kujawa",
@@ -106,20 +107,23 @@ module.exports = (env = {}, argv) => {
         "process.env.GIT_COMMIT_HASH": JSON.stringify(gitCommitHash),
       }),
 
-      new SentryCliPlugin({
-        authToken:
-          "288686163f564ca9878973e779b09c095188f0f3ec724c8abc17ac0732810652",
-        dryRun: isDev,
-        ignore: ["node_modules", "webpack.config.js"],
-        include: "./dist",
-        org: "paul-kujawa",
-        project: "webpack-playground",
-        release: gitCommitHash,
-        setCommits: { auto: true },
-      }),
-
       // visual representation of bundles and chunks.
       ...(env.analyse ? [new BundleAnalyzerPlugin()] : []),
+
+      // delete sourcemaps after build since they were uploaded to Sentry via the SDK
+      // and do not need to be available to end-users and potential attackers.
+      new RemovePlugin({
+        after: {
+          test: [
+            {
+              folder: "./dist",
+              method: (absoluteItemPath) => {
+                return new RegExp(/\.js\.map$/, "m").test(absoluteItemPath);
+              },
+            },
+          ],
+        },
+      }),
     ],
 
     optimization: {

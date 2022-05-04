@@ -6,7 +6,6 @@
   "scripts": {
     "start": "webpack serve",
     "build": "webpack",
-    "postbuild": "rm ./dist/*.map",
     "test": "cross-env BABEL_ENV=test jest",
     "lint": "eslint src",
     "format": "prettier --write \"./**\"",
@@ -68,6 +67,7 @@
     "lodash": "^4.17.20",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "remove-files-webpack-plugin": "^1.5.0",
     "single-spa": "^5.9.3",
     "single-spa-react": "^4.6.1",
     "ts-jest": "^27.0.3",

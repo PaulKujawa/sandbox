@@ -17,7 +17,6 @@ module.exports = (env, argv) => {
   const isProd = !isDev;
 
   const gitCommitHash = new GitRevisionPlugin().commithash();
-  const gitCommitHashShortened = gitCommitHash.substring(0, 8);
 
   return merge(defaultConfig, {
     mode: isProd ? "production" : "development",
@@ -43,7 +42,19 @@ module.exports = (env, argv) => {
         project: "webpack-playground",
         release: gitCommitHash,
         setCommits: { auto: true, ignoreMissing: true },
-        // urlPrefix: `~/`, `~/shelf-main-navigation/${CI_COMMIT_SHORT_SHA}/`
+      }),
+
+      new RemovePlugin({
+        after: {
+          test: [
+            {
+              folder: "./dist",
+              method: (absoluteItemPath) => {
+                return new RegExp(/\.js\.map$/, "m").test(absoluteItemPath);
+              },
+            },
+          ],
+        },
       }),
     ],
     module: {
