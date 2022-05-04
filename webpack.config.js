@@ -1,6 +1,5 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -16,14 +15,18 @@ module.exports = (env = {}, argv) => {
   const gitCommitHash = new GitRevisionPlugin().commithash();
 
   return {
+    mode: isProd ? "production" : "development",
     entry: {
-      index: "./src/index.tsx",
+      index: "./src/entry-standalone/Index.tsx",
     },
     output: {
       // where to put any output file - the dist folder for the webserver and nginx.
       path: path.resolve(__dirname, "dist"),
       // also used for bundles created via dynamic imports.
       filename: "[name].[contenthash].js",
+      // clear output folder before re-run
+      clean: true,
+
       // publicPath: '/'
     },
     resolve: {
@@ -44,7 +47,7 @@ module.exports = (env = {}, argv) => {
 
       // TODO If your page expects to find the bundle files on a different path,
       // you can change this with the publicPath option in the dev server's configuration.
-      contentBase: "./dist",
+      static: "./dist",
 
       // open the default browser after initial build.
       open: true,
@@ -72,14 +75,11 @@ module.exports = (env = {}, argv) => {
       ],
     },
     plugins: [
-      // reset output.path on build while !cleanStaleWebpackAssets avoids the deletion of index.html on incremental builds.
-      new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-
       // generate index.html that references output files dynamically.
       // A custom HTML template is needed for React's root div to be placed.
       new HtmlWebpackPlugin({
-        template: "./src/index.html",
-        favicon: "./src/assets/favicon.ico",
+        template: "./src/entry-standalone/index.html",
+        favicon: "./src/entry-standalone/favicon.ico",
       }),
 
       // replace variables in code with provided values at compilation time
@@ -87,15 +87,18 @@ module.exports = (env = {}, argv) => {
         "process.env.GIT_COMMIT_HASH": JSON.stringify(gitCommitHash),
       }),
 
+      // push releases incl. sourcemaps and git commits to Sentry
       new SentryCliPlugin({
         authToken:
           "288686163f564ca9878973e779b09c095188f0f3ec724c8abc17ac0732810652",
         dryRun: isDev,
+        ignore: ["node_modules"],
         include: "./dist",
         org: "paul-kujawa",
         project: "webpack-playground",
         release: gitCommitHash,
-        setCommits: { auto: true },
+        setCommits: { auto: true, ignoreMissing: true },
+        // urlPrefix: `~/` matches `/foo.js` (default) and `~/js/` matches `/js/foo.js`. Also works for CDNs
       }),
 
       // visual representation of bundles and chunks.
