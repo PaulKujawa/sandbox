@@ -3,7 +3,7 @@ import {
   OPTIONS_BROWSER_SDK,
   OPTIONS_REACT_SDK,
   startSessionTracking,
-} from "./internal";
+} from "./sentry-internal";
 
 export interface Params {
   dsn: string;

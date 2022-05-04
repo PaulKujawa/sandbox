@@ -1,6 +1,6 @@
-import { ErrorMonitorFactory } from "./ext-sentry-integration";
+import { ErrorMonitorFactory } from "./sentry-factory";
 
 export const ErrorMonitor = ErrorMonitorFactory({
-  dsn: "https://0e3056564fc74650a1c62e1d00b532a7@o273281.ingest.sentry.io/6375291",
+  dsn: "https://96411070a6ac4a41971f81c7270d4c34@o273281.ingest.sentry.io/6378781",
   release: process.env.GIT_COMMIT_HASH!,
 });
