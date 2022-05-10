@@ -1,7 +1,8 @@
+import { useQuery } from "react-query";
 import { Todo } from "./entities";
 
-export const getTodo = async () => {
-  const response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
-
-  return response.json() as Promise<Todo>;
+export const useGetTodo = () => {
+  return useQuery<Todo>("todos", () =>
+    fetch("https://jsonplaceholder.typicode.com/todos/1")
+  );
 };
