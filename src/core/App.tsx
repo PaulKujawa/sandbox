@@ -1,44 +1,44 @@
-import { Box, Button } from "@material-ui/core";
+import CssBaseline from "@mui/material/CssBaseline";
 import React from "react";
-import { QueryClientProvider } from "react-query";
-import { Form, Header } from "./components";
-import { ErrorMonitor, ReactQueryClient } from "./lib";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ErrorPage } from "./ErrorPage";
+import {
+  QueryClientProvider,
+  ReactQueryClient,
+  ReactQueryDevtools,
+} from "./lib";
+import { LandingPage, Layout, PostPage, PostsPage } from "./routes";
 
-import "./App.css";
-import ImageDogeUrl from "./assets/doge.jpg"; // includes domain and port
-import(/* webpackPreload: true */ "lodash");
+// decided not to add ReactRouter Loader API yet, despite their collab with ReactQuery,
+// due to boilerplate code, weak TS support, and added SSR complexity.
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "",
+        element: <LandingPage />,
+      },
+      {
+        path: "posts",
+        element: <PostsPage />,
+      },
+      {
+        path: "posts/:postId",
+        element: <PostPage />,
+      },
+    ],
+  },
+]);
 
 export const App = () => {
-  const onClick = async () => {
-    const { default: _ } = await import(
-      /* webpackChunkName: "lodash" */ "lodash"
-    );
-
-    alert(_.join(["this", "actually", "worked"], " "));
-  };
-
   return (
     <QueryClientProvider client={ReactQueryClient}>
-      <div className="root">
-        <Header />
-        <img style={{ height: "400px", width: "400px" }} src={ImageDogeUrl} />
-        <Form />
-        <Button variant="outlined" color="primary" onClick={() => onClick()}>
-          Clicky
-        </Button>
-
-        <Box mt={1}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => {
-              ErrorMonitor.logException(new Error("some bug " + Math.random()));
-            }}
-          >
-            Throw error
-          </Button>
-        </Box>
-      </div>
+      <CssBaseline />
+      <ReactQueryDevtools initialIsOpen={false} />
+      <RouterProvider router={router} />
     </QueryClientProvider>
   );
 };

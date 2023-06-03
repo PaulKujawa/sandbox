@@ -3,10 +3,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const SentryCliPlugin = require("@sentry/webpack-plugin");
 const webpack = require("webpack");
 const { GitRevisionPlugin } = require("git-revision-webpack-plugin");
-const RemovePlugin = require("remove-files-webpack-plugin");
 
 module.exports = (env = {}, argv) => {
   const isDev = !!env.WEBPACK_SERVE;
@@ -28,7 +26,11 @@ module.exports = (env = {}, argv) => {
       // clear output folder before re-run
       clean: true,
 
-      // publicPath: '/'
+      // if the client requests the (HTML) document for https://localhost/posts/3,
+      // historyApiFallback will have the server try to serve the default index.html.
+      // now, the server would try to serve https://localhost/posts/index.html and return 404.
+      // with publicPath `/`, it successfully serves https://localhost/index.html
+      publicPath: "/",
     },
     resolve: {
       // so file extensions can be left out in imports
@@ -40,7 +42,8 @@ module.exports = (env = {}, argv) => {
         new TsconfigPathsPlugin({ configFile: "./tsconfig.json" }),
       ],
     },
-    // see https://webpack.js.org/configuration/devtool/#production for further optimisation
+    // full sourcemaps should be generated on production for monitoring software like Datadog or Sentry.
+    // But as industry security practise not shown to actual users. So after upload, remove them e.g. via the RemovePlugin.
     devtool: isProd ? "hidden-source-map" : "eval-cheap-source-map",
     devServer: {
       // which folder to serve from on localhost:8080.
@@ -55,6 +58,11 @@ module.exports = (env = {}, argv) => {
 
       // see https://webpack.js.org/guides/hot-module-replacement & https://github.com/gaearon/react-hot-loader
       hot: false,
+
+      // the config name references the HTML5 History API, that client-side routers use for SPA navigation.
+      // since the server is not aware of any pathnames defined in the app, it serves the app for all paths,
+      // effectively leaving it to the client-router to decide what to show (content or 404).
+      historyApiFallback: true,
     },
     module: {
       rules: [
@@ -88,42 +96,8 @@ module.exports = (env = {}, argv) => {
         "process.env.GIT_COMMIT_HASH": JSON.stringify(gitCommitHash),
       }),
 
-      // push releases incl. sourcemaps and git commits to Sentry
-      new SentryCliPlugin({
-        authToken:
-          "288686163f564ca9878973e779b09c095188f0f3ec724c8abc17ac0732810652",
-        dryRun: isDev,
-        ignore: ["node_modules"],
-        include: "./dist",
-        org: "paul-kujawa",
-        project: "webpack-playground",
-        release: gitCommitHash,
-        setCommits: { auto: true, ignoreMissing: true },
-        // urlPrefix: `~/` matches `/foo.js` (default) and `~/js/` matches `/js/foo.js`. Also works for CDNs
-      }),
-
-      // replace variables in code with provided values at compilation time
-      new webpack.DefinePlugin({
-        "process.env.GIT_COMMIT_HASH": JSON.stringify(gitCommitHash),
-      }),
-
       // visual representation of bundles and chunks.
       ...(env.analyse ? [new BundleAnalyzerPlugin()] : []),
-
-      // delete sourcemaps after build since they were uploaded to Sentry via the SDK
-      // and do not need to be available to end-users and potential attackers.
-      new RemovePlugin({
-        after: {
-          test: [
-            {
-              folder: "./dist",
-              method: (absoluteItemPath) => {
-                return new RegExp(/\.js\.map$/, "m").test(absoluteItemPath);
-              },
-            },
-          ],
-        },
-      }),
     ],
 
     optimization: {

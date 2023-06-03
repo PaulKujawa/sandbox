@@ -9,7 +9,7 @@ const lifecycles = singleSpaReact({
   ReactDOM,
   rootComponent: App,
   errorBoundary: (err) => {
-    ErrorMonitor.logException(err);
+    ErrorMonitor.addError(err);
     return <div />;
   },
   domElementGetter: () =>

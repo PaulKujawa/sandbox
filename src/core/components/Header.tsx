@@ -1,6 +1,12 @@
-import React from "react"
-import "./header.css";
+import { Typography } from "@mui/material";
+import React from "react";
 
 export const Header = () => {
-    return <div className="header">Hello Webpack</div>
-}
+  return (
+    <>
+      <Typography textAlign="center" component="h1" variant="h3">
+        Header content
+      </Typography>
+    </>
+  );
+};
