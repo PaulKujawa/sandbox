@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src",
+    "declaration": false,
+    "jsx": "react",
+    "lib": ["DOM", "ES2021"],
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "paths": {},
+    "sourceMap": true,
+    "strict": true,
+    "target": "ESNext"
+  }
+}
