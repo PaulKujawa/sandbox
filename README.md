@@ -22,3 +22,8 @@
 - React Concurrent Rendering (useDefferedValue, but no useTransition)
 - Experimental Features
   - suspense-enabled data fetching (react-query, React18 RC3)
+
+## WIP SSR
+
+- use React 18's `renderToPipeableStream`
+- MUI v5 uses EmotionJs, which in turn only supports React 17's `renderToString`

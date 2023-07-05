@@ -1,3 +1,5 @@
+/* TODO unused in SSR as of now */
+
 .root {
   height: 100vh;
   display: grid;

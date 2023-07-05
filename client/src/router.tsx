@@ -12,38 +12,38 @@ export const NavElements = [
 
 // decided not to add ReactRouter Loader API yet, despite their collab with ReactQuery,
 // due to boilerplate code, weak TS support, and added SSR complexity.
-export const Router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "",
-        element: <LandingPage />,
-      },
-      {
-        path: "posts",
-        lazy: async () => {
-          const { default: Component } = await import(
-            "./posts/page"
-            /* webpackChunkName: "PostsPage" */
-            /* webpackPrefetch: true */
-          );
-          return { Component };
-        },
-      },
-      {
-        path: "media-center",
-        lazy: async () => {
-          const { default: Component } = await import(
-            "./media-center/page"
-            /* webpackChunkName: "MediaCenter" */
-            /* webpackPrefetch: true */
-          );
-          return { Component };
-        },
-      },
-    ],
-  },
-]);
+// export const Router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <Layout />,
+//     errorElement: <ErrorPage />,
+//     children: [
+//       {
+//         path: "",
+//         element: <LandingPage />,
+//       },
+//       {
+//         path: "posts",
+//         lazy: async () => {
+//           const { default: Component } = await import(
+//             "./posts/page"
+//             /* webpackChunkName: "posts-page" */
+//             /* webpackPrefetch: true */
+//           );
+//           return { Component };
+//         },
+//       },
+//       {
+//         path: "media-center",
+//         lazy: async () => {
+//           const { default: Component } = await import(
+//             "./media-center/page"
+//             /* webpackChunkName: "media-center" */
+//             /* webpackPrefetch: true */
+//           );
+//           return { Component };
+//         },
+//       },
+//     ],
+//   },
+// ]);
