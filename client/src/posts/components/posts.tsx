@@ -20,7 +20,7 @@ export const Posts = ({ query, selectedPost, onSelect }: Props) => {
   }, [posts]);
 
   return (
-    <List sx={{ borderRight: 1 }}>
+    <List sx={{ borderRight: 1, minHeight: '100%' }}>
       {posts
         .filter((post) => post.title.includes(query))
         .map((post) => (
