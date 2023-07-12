@@ -6,7 +6,7 @@ export const HttpService = {
     const response = await fetch(input);
     const json = await response.json();
 
-    await wait();
+    await wait(0);
 
     return json as DTO;
   },
