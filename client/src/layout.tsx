@@ -79,7 +79,7 @@ export default () => {
         }}
       >
         <div>back button</div>
-        <Box sx={{ flexGrow: 1, overflowY: "hidden" }}>
+        <Box sx={{ display: "flex", flexGrow: 1, overflowY: "hidden", flexDirection: "column" }}>
           <Outlet />
         </Box>
       </Box>

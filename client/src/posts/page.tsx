@@ -33,10 +33,9 @@ export default () => {
       <Box
         sx={{
           display: "flex",
-          height: "100%",
-          width: "100%",
           py: 1,
           overflowY: "auto",
+          flexGrow: 1
         }}
       >
         <Box flexBasis="50%">
