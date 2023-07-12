@@ -5,7 +5,7 @@ import React, { StrictMode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { RouterProvider } from "react-router-dom";
 import { Router } from "router";
-import { QueryClientProvider, ReactQueryClient, ReactQueryDevtools } from "lib";
+import { QueryClientProvider, ReactQueryClient } from "lib";
 
 export default () => {
   const { reset } = useQueryErrorResetBoundary();
@@ -13,7 +13,7 @@ export default () => {
   return (
     <StrictMode>
       <QueryClientProvider client={ReactQueryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         <CssBaseline />
 
         <ErrorBoundary

@@ -10,44 +10,48 @@ export default () => {
   const deferredQuery = React.useDeferredValue(query);
 
   return (
-    <Box sx={{ display: "flex", height: "100%", width: "100%", py: 1 }}>
-      <Box flexBasis="50%">
-        <Box sx={{ ml: 2, pb: 2 }}>
-          <Typography variant="h4" component="h1">
-            Posts
-          </Typography>
+    <>
+      <Box sx={{ ml: 2, pb: 2 }}>
+        <Typography variant="h4" component="h1">
+          Posts
+        </Typography>
 
-          <TextField
-            variant="standard"
-            label="Search by title"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </Box>
-        <Divider />
-
-        <Suspense fallback={<PostsPlaceholder />}>
-          <Posts
-            query={deferredQuery}
-            selectedPost={selectedPost}
-            onSelect={selectPost}
-          />
-        </Suspense>
+        <TextField
+          variant="standard"
+          label="Search by title"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
       </Box>
+
+      <Divider />
 
       <Box
         sx={{
-          flexBasis: "50%",
-          borderLeft: 1,
-          borderColor: "grey.500",
+          flexGrow: 1,
+          py: 1,
+          overflowY: "auto",
+          display: "flex",
         }}
       >
-        {selectedPost && (
-          <Suspense fallback={<PostPlaceholder />}>
-            <Post id={selectedPost} />
+        <Box flexBasis="50%" sx={{ overflowY: "auto" }}>
+          <Suspense fallback={<PostsPlaceholder />}>
+            <Posts
+              query={deferredQuery}
+              selectedPost={selectedPost}
+              onSelect={selectPost}
+            />
           </Suspense>
-        )}
+        </Box>
+
+        <Box flexBasis="50%">
+          {selectedPost && (
+            <Suspense fallback={<PostPlaceholder />}>
+              <Post id={selectedPost} />
+            </Suspense>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };

@@ -1,7 +1,7 @@
 import { List, ListItemButton, ListItemText } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { PostsQuery } from "../repositories";
+import { GetPostsQuery } from "../repositories";
 
 interface Props {
   query: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const Posts = ({ query, selectedPost, onSelect }: Props) => {
-  const { data } = useQuery(PostsQuery());
+  const { data } = useQuery(GetPostsQuery());
   const posts = data!; // react-query lacks full suspense TS support
 
   React.useEffect(() => {
@@ -20,7 +20,7 @@ export const Posts = ({ query, selectedPost, onSelect }: Props) => {
   }, [posts]);
 
   return (
-    <List sx={{ flexBasis: "50%" }}>
+    <List sx={{ minHeight: "100%", borderRight: 1 }}>
       {posts
         .filter((post) => post.title.includes(query))
         .map((post) => (

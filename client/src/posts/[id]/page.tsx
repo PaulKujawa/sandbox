@@ -1,14 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { PostQuery } from "./repositories";
+import { GetPostQuery } from "./repositories";
 
 interface Params {
   id: string;
 }
 
 export default ({ id }: Params) => {
-  const { data } = useQuery(PostQuery(id));
+  const { data } = useQuery(GetPostQuery(id));
   const post = data!; // react-query lacks full suspense TS support
 
   return (
