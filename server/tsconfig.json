@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "module": "NodeNext",
     "outDir": "dist",
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext"

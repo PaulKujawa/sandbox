@@ -5,7 +5,7 @@ import { PostPlaceholder } from "./[id]/components";
 import { Posts, PostsPlaceholder } from "./components";
 
 export default () => {
-  const [selectedPost, selectPost] = React.useState<string | undefined>();
+  const [selectedPostId, selectPostId] = React.useState<string>();
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
 
@@ -38,16 +38,16 @@ export default () => {
           <Suspense fallback={<PostsPlaceholder />}>
             <Posts
               query={deferredQuery}
-              selectedPost={selectedPost}
-              onSelect={selectPost}
+              selectedPost={selectedPostId}
+              onSelect={selectPostId}
             />
           </Suspense>
         </Box>
 
         <Box flexBasis="50%">
-          {selectedPost && (
+          {selectedPostId && (
             <Suspense fallback={<PostPlaceholder />}>
-              <Post id={selectedPost} />
+              <Post id={selectedPostId} />
             </Suspense>
           )}
         </Box>

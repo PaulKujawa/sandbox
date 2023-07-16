@@ -13,8 +13,7 @@ export default ({ id }: Params) => {
 
   return (
     <Box m={1}>
-      <Typography variant="h5">Todo {post.id}</Typography>
-      <Typography variant="body1">Title: {post.title}</Typography>
+      <Typography variant="h5">{post.title}</Typography>
       <Typography color="text.secondary" variant="body2">
         Body: {post.body}
       </Typography>

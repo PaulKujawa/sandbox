@@ -10,7 +10,7 @@ export default () => {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    queryClient.prefetchQuery(GetPostsQuery());
+    queryClient.prefetchInfiniteQuery(GetPostsQuery());
   }, []);
 
   return (
