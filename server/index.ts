@@ -9,7 +9,7 @@ import postsOld from "./data/posts-old.json" assert { type: "json" };
 
 const app = express();
 app.use(cors());
-app.use(fileUpload({ limits: { files: 10, fileSize: 5 * 1024 * 1024 } }));
+app.use(fileUpload({ limits: { files: 10, fileSize: 2 * 1024 * 1024 } }));
 
 const server = createServer(app);
 const ioServer = new Server(server, {

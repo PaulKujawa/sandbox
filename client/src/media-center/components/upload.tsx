@@ -8,11 +8,23 @@ import { PostFileQuery } from "media-center/repositories";
 import React from "react";
 
 const MAX_FILES = 5;
-const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_MB = 2;
+
+type State = "idle" | "invalid" | "loading" | "success" | "error";
+
+interface Content {
+  icon: React.ReactElement;
+  caption: string;
+  color: string;
+}
 
 export const Upload = () => {
+  const [content, setContent] = React.useState<Content>(ContentStates["idle"]);
   const mutation = useMutation(PostFileQuery());
-  const content = StateContent[mutation.status];
+
+  React.useEffect(() => {
+    setContent(ContentStates[mutation.status]);
+  }, [mutation.status]);
 
   const onInputChange: React.ChangeEventHandler<HTMLInputElement> = ({
     target,
@@ -20,9 +32,13 @@ export const Upload = () => {
     const files = Array.from(target.files!);
     const validationErrors = validate(files);
 
-    // TODO convert into user-visible validation messages.
     if (validationErrors.length) {
-      validationErrors.forEach(console.log);
+      setContent({
+        icon: <CloudOffOutlined fontSize="large" />,
+        caption: validationErrors[0],
+        color: "error",
+      });
+
       return;
     }
 
@@ -63,6 +79,7 @@ export const Upload = () => {
             accept="image/*,*.pdf"
             name="file-upload"
             multiple
+            disabled={mutation.status === "loading"}
             sx={{
               position: "absolute",
               left: 0,
@@ -80,10 +97,8 @@ export const Upload = () => {
   );
 };
 
-const StateContent: Record<
-  "idle" | "loading" | "success" | "error",
-  { icon: React.ReactElement; caption: string; color: string }
-> = {
+// `invalid` state requires dynamic content. Made me less convinced of this pattern here.
+const ContentStates: Record<Exclude<State, "invalid">, Content> = {
   idle: {
     icon: <CloudUploadOutlined fontSize="large" />,
     caption: "Choose a file or drag it here.",
@@ -106,11 +121,7 @@ const StateContent: Record<
   },
 };
 
-/*
- * the validate function returns harcoded validation messages.
- * were i18n added, one could follow https://github.com/jquense/yup#localization-and-i18n
- * and accept translation keys, but I would still return translated messages.
- */
+// API is based on Yup
 const validate = (files: File[]): string[] => {
   const errors: string[] = [];
 
