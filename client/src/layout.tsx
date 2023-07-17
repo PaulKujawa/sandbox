@@ -77,7 +77,7 @@ export default () => {
         sx={{
           gridArea: "main",
           overflowY: "hidden",
-          p: 1,
+          p: 2,
           display: "flex",
           flexDirection: "column",
         }}

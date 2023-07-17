@@ -18,7 +18,7 @@ interface Content {
   color: string;
 }
 
-export const Upload = () => {
+export const FileUpload = () => {
   const [content, setContent] = React.useState<Content>(ContentStates["idle"]);
   const mutation = useMutation(PostFileQuery());
 

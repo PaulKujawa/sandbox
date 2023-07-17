@@ -31,7 +31,7 @@ export const Posts = ({ query, selectedPost, onSelect }: Props) => {
       isFetching={isFetching}
       fetchMore={fetchNextPage}
     >
-      <List sx={{ minHeight: "100%", borderRight: 1 }}>
+      <List sx={{ minHeight: "100%" }}>
         {posts
           .filter((post) => post.title.includes(query))
           .map((post) => (

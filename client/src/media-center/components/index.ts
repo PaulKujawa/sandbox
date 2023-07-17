@@ -1,2 +1,2 @@
-export * from "./download";
-export * from "./upload";
+export * from "./file-download";
+export * from "./file-upload";

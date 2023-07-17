@@ -1,8 +1,8 @@
-import { Box, Divider, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import React, { Suspense } from "react";
-import Post from "./[id]/page";
-import { PostPlaceholder } from "./[id]/components";
 import { Posts, PostsPlaceholder } from "./components";
+import { PostPlaceholder } from "./[id]/components";
+import Post from "./[id]/page";
 
 export default () => {
   const [selectedPostId, selectPostId] = React.useState<string>();
@@ -11,7 +11,7 @@ export default () => {
 
   return (
     <>
-      <Box sx={{ ml: 2, pb: 2 }}>
+      <Box sx={{ pb: 2 }}>
         <Typography variant="h4" component="h1">
           Posts
         </Typography>
@@ -24,8 +24,6 @@ export default () => {
         />
       </Box>
 
-      <Divider />
-
       <Box
         sx={{
           flexGrow: 1,
@@ -34,7 +32,7 @@ export default () => {
           display: "flex",
         }}
       >
-        <Box flexBasis="50%" sx={{ overflowY: "auto" }}>
+        <Box flexBasis="50%" sx={{ overflowY: "auto", pr: 2, borderRight: 1 }}>
           <Suspense fallback={<PostsPlaceholder />}>
             <Posts
               query={deferredQuery}
@@ -44,7 +42,7 @@ export default () => {
           </Suspense>
         </Box>
 
-        <Box flexBasis="50%">
+        <Box sx={{ flexBasis: "50%", pl: 2 }}>
           {selectedPostId && (
             <Suspense fallback={<PostPlaceholder />}>
               <Post id={selectedPostId} />

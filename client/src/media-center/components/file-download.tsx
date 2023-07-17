@@ -5,7 +5,7 @@ import React from "react";
  * could be later enhanced with progressive loading (LQIP)
  * and perhaps a gallery and lazy loading (IntersectionObserver)
  */
-export const Download = () => {
+export const FileDownload = () => {
   const [isImageVisible, setImageVisibility] = React.useState(false);
 
   return (
