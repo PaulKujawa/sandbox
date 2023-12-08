@@ -50,8 +50,7 @@ export const FileUpload = () => {
   return (
     <Box
       sx={{
-        height: "100%",
-        mx: "25%",
+        // height: "100%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -76,7 +75,7 @@ export const FileUpload = () => {
           <Box
             component="input"
             type="file"
-            accept="image/*,*.pdf"
+            accept="image/*,application/pdf"
             name="file-upload"
             multiple
             disabled={mutation.status === "loading"}
@@ -130,8 +129,9 @@ const validate = (files: File[]): string[] => {
   }
 
   const isValidType = ({ type }: File) => {
-    return type.startsWith("image/") || type.endsWith(".pdf");
+    return type.startsWith("image/") || type === "application/pdf";
   };
+
   if (!files.every(isValidType)) {
     errors.push("Only image and PDF.");
   }

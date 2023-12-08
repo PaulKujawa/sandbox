@@ -1,19 +1,19 @@
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
-import { Download, Upload } from "./components";
+import { FileGrid, FileUpload } from "./components";
 
 export default () => {
   return (
     <>
-      <Box sx={{ flexGrow: 0, flexShrink: 0, flexBasis: "50%" }}>
-        <Download />
+      {/* flexGrow: 0, flexShrink: 0, flexBasis: "50%", */}
+      <Box sx={{ mb: 4, mx: { xs: 0, sm: "10%", md: "20%", lg: "25%" } }}>
+        <FileUpload />
       </Box>
 
-      <Divider />
-
-      <Box sx={{ flexGrow: 0, flexShrink: 0, flexBasis: "50%" }}>
-        <Upload />
-      </Box>
+      {/* flexGrow: 1, flexShrink: 0, flexBasis: "50%" */}
+      <FileGrid />
+      {/* <FileDownload /> */}
+      {/* </Box> */}
     </>
   );
 };

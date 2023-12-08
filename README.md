@@ -14,14 +14,13 @@
 
 - bundling, linting, formatting (webpack, ESLint, Prettier)
 - transpiling incl. sourcemaps, TS definition files, and browser support (webpack, TSC, Babel)
-- themed UI components (mui)
 - client-side routing (react-router, webpack)
   - code-split & prefetched pages (react-router, webpack)
   - prefetched pages' data (react-query)
 - client network cache (react-query)
 - React Concurrent Rendering (useDefferedValue, but no useTransition)
-- Experimental Features
-  - suspense-enabled data fetching (react-query, React18 RC3)
+- suspense-enabled data-fetching (React **Experimental**!, react-query)
+- UI development incl. infinite scrolling (mui)
 
 ## Notes
 
@@ -38,3 +37,6 @@
     - transpile not via `ts-node` (https://github.com/TypeStrong/ts-node/issues/1007),
       but either `tsc-watch` or both plain `tsc` and `node`
       and since TSC can only accept a tsconfig OR entry file, set `outDir` in tsconfig
+- besides
+  - JSON needs to be imported suffixed with ` assert { type: "json" };`
+  - globals like `__dirname` do not exist anymore

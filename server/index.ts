@@ -3,18 +3,23 @@ import express from "express";
 import fileUpload from "express-fileupload";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import path from "path";
 
 import postsLive from "./data/posts-live.json" assert { type: "json" };
 import postsOld from "./data/posts-old.json" assert { type: "json" };
+import { readdirSync } from "fs";
+
+const PORT = 8080;
 
 const app = express();
 app.use(cors());
 app.use(fileUpload({ limits: { files: 10, fileSize: 2 * 1024 * 1024 } }));
+app.use(express.static("public"));
 
 const server = createServer(app);
 const ioServer = new Server(server, {
   cors: {
-    origin: "http://localhost:8080",
+    origin: `http://localhost:${PORT}`,
     methods: ["GET"],
   },
 });
@@ -51,10 +56,21 @@ app.get("/posts/:id", (req, res) => {
     return res.json(post);
   }
 
-  return res.status(404).send("Not Found");
+  res.status(404).send("Not Found");
 });
 
-app.post("/upload", (req, res) => {
+app.get("/files", (req, res) => {
+  // const dirUrl = new URL(".", import.meta.url);
+  const folderPath = path.join(".", "public");
+
+  const urls = readdirSync(folderPath).map(
+    (filename) => `http://localhost:${PORT}/${filename}`
+  );
+
+  res.json(urls);
+});
+
+app.post("/file", (req, res) => {
   if (!req.files || !Object.keys(req.files).length) {
     return res.status(400).send("Not a file.");
   }
@@ -63,12 +79,18 @@ app.post("/upload", (req, res) => {
   const file = req.files.file as fileUpload.UploadedFile;
 
   // TODO found no config option for mimetype check
-  if (!file.mimetype.startsWith("image/") && !file.mimetype.endsWith(".pdf")) {
+  if (
+    !file.mimetype.startsWith("image/") &&
+    file.mimetype !== "application/pdf"
+  ) {
     return res.status(400).send("Wrong mimetype.");
   }
 
-  file.mv(`./public/${file.name}`, (err) => {
-    if (err) return res.status(500).send(err);
+  const filepath = path.join(".", "public", file.name);
+  file.mv(filepath, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
 
     res.json(null);
   });
@@ -91,6 +113,6 @@ ioServer.on("connection", (socket) => {
   socket.on("disconnect", () => {});
 });
 
-server.listen(8080, () => {
-  console.log(`Server is listening on port 8080`);
+server.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
 });
